@@ -1,13 +1,15 @@
 ﻿#include <iostream>
 #include "Evolvent.h"
-
+#include <locale.h>
 
 int main(){
-    lab_2::Evolvent e(2, 1, 2);
+    setlocale(LC_ALL, "");
+    lab_2::Evolvent e(1, 10, 2);
     lab_2::Point p(3);
     int fl1 = 1;
     double r;
     char* s = nullptr;
+    std::cout << "ЗДРАВСТВУЙТЕ!!!" << std::endl;
     while (fl1) {
         std::cout << "Уравнение эвольвенты: " << std::endl;
         s = e.frm();
@@ -16,24 +18,29 @@ int main(){
 
         int fl2 = 1;
         while (fl2) {
-            std::cout << "Enter x for calc. value y(x) or press ctrl+z to quit:" << std::endl;
-            double x;
-            lab_2::Point y;
-            std::cin >> x;
+            std::cout << "Введите угол поворота в радианах и длину дуги:" << std::endl;
+            double angle;
+            double arc_len;
+            std::cin >> angle;
+            std::cin >> arc_len;
             fl2 = std::cin.good();
             if (!fl2)
                 continue;
-            /*try {
-                y = e.f(x);
-                std::cout << "y1 = " << y.x << ", y2 = " << y.y << std::endl;
+            try {
+                double curvature_radius = e.curvatureRadius(arc_len);
+                std::cout << "радиус кривизны при данной длине дуги = " << curvature_radius << std::endl;
             }
             catch (std::exception& ex) {
                 std::cout << ex.what() << std::endl;
-            }*/
+            }
+            lab_2::Point p = e.cartesianFromAngle(angle);
+            std::cout << "Декартовы координаты точки лежащей на эвольвенте при данном угле поворота: x = " << p.x << " y = " << p.y << std::endl;
+            std::cout << "Длина дуги при заданном угле поворота = " << e.ArcLenFromAngle(angle) << std::endl;
+            std::cout << "Расстояние до центра при данном угле поворота =  " << e.distanceToCenter(angle) << std::endl;
         }
 
         std::cin.clear();
-        std::cout << "Enter new x, y and r to continue or press ctrl+Z:" << std::endl;
+        std::cout << "Введите новые координаты ц.о. и радиус окружности или ctrl+Z:" << std::endl;
         std::cin >> p.x >> p.y >> r;
         if (std::cin.good()) {
             e.setP(p);

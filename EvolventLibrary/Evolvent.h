@@ -34,7 +34,7 @@ namespace lab_2
         Point cartesianFromAngle(int) const; // перегружаем, чтобы не радианами едиными
         double ArcLenFromAngle(double angle) const { return r*angle*angle/2; }; // п.5: длина дуги от угла поворота
         double ArcLenFromAngle(int angle) const { return r *degToRad(angle)*degToRad(angle)/2; }; // опять перегружаем, чтобы можно было задать в градусах
-        double curvatureRadius(double arc_len) const { return sqrt(2 * r * arc_len); }; // п.6
+        double curvatureRadius(double) const; // п.6
         char* frm() const;
     };
 }

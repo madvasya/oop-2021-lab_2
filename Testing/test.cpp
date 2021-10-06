@@ -72,23 +72,24 @@ TEST(EvolventMethods, Parameters) {
 	p2.y = 1;
 	a1.setP(p2);
 	ASSERT_NEAR(sqrt(2), a1.distanceToCenter(0), err);
-	/*ASSERT_EQ(0, a1.f(1).x);
-	ASSERT_EQ(0, a1.f(1).y);
-	ASSERT_EQ(1, a1.f(0).x);
-	ASSERT_EQ(-1, a1.f(0).y);
-	ASSERT_ANY_THROW(a1.f(2));*/
-	ASSERT_STREQ("x ^ 2 + y ^ 2 = 1.00\n", a1.frm());
+	ASSERT_ANY_THROW(a1.curvatureRadius(-1));
+}
 
-	/*lab_2::Evolvent a2(1, 3, 2);
-	ASSERT_NEAR(PI * 4, a2.area(), err); 
-	ASSERT_NEAR(2 * PI * 2, a2.perimeter(), err);
-	ASSERT_EQ(sqrt(10), a2.distance());
-	ASSERT_EQ(5, a2.f(1).x);
-	ASSERT_EQ(1, a2.f(1).y);
-	ASSERT_NEAR(3 + sqrt(3), a2.f(0).x, err);
-	ASSERT_EQ(3 - sqrt(3), a2.f(0).y);
-	ASSERT_ANY_THROW(a2.f(-2));
-	ASSERT_STREQ("(x - 1.00) ^ 2 + (y - 3.00) ^ 2 = 4.00\n", a2.frm());*/
+TEST(EvolventMethods, Formulas) {
+	lab_2::Evolvent e1;
+	char* s = e1.frm();
+	std::cout << s << std::endl;
+	ASSERT_STREQ("X = 1.00*(cos(t) + t*sin(t)) | Y = 1.00*(sin(t) - t*cos(t))", s);
+	lab_2::Evolvent e2(3, 5, 2);
+	ASSERT_STREQ("X = 2.00*(cos(t) + t*sin(t)) + 3.00 | Y = 2.00*(sin(t) - t*cos(t)) + 5.00", e2.frm());
+	lab_2::Point p(1, 2);
+	e2.setP(p);
+	e2.setR(0);
+	ASSERT_STREQ("X = 1.00 | Y = 2.00", e2.frm());
+	p.x = 0;
+	p.y = 0;
+	e2.setP(p);
+	ASSERT_STREQ("X = 0.00 | Y = 0.00", e2.frm());
 }
 
 int main(int argc, char** argv) {

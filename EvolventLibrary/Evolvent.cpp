@@ -52,39 +52,46 @@ namespace lab_2{
         double angle_rad = degToRad(angle);
         return Evolvent::cartesianFromAngle(angle_rad);
     }
+    double Evolvent::curvatureRadius(double arc_len) const{
+        if(arc_len < 0 )
+            throw std::exception("Длина дуги не может быть отрицательной!");
+        return sqrt(2 * r * arc_len);
+    }
 
     char* Evolvent::frm() const {//формула эвольвенты: X = r*(cos(u)+u*sin(u)) + Xo\nY = r*(sin(u)-u*sin(u))+ Yo
-        const char* s1 = "X =  +  *(cos(t) + t*sin(t))\nY =  +  *(sin(t) - t*cos(t))\n";
+        const char* s1 = "X = *(cos(t) + t*sin(t))  + | Y = *(sin(t) - t*cos(t))  + ";
         int l = strlen(s1) + 1;
-        size_t Size = 20;
         char num[20];
         sprintf_s(num, 20, "%.2f", p.x);
         l += strlen(num);
         sprintf_s(num, 20, "%.2f", p.y);
         l += strlen(num);
         sprintf_s(num, 20, "%.2f", r);
-        l += strlen(num);
+        l += 2 * strlen(num);
         char* s = new char[l];// выделяем память под наши буквицы
 
         sprintf_s(s, l, "X = ");
-        if (p.x == 0 && r == 0)
-            sprintf_s(s, l, "0");
-        if (p.x != 0)
-            sprintf_s(s, l, "%.2f + ", p.x);
         int k = strlen(s);
-        if (r != 0)
-            sprintf_s(s + k, l - k, "%.2f*(cos(t)+ t*sin(t))\n", r);
+        if (r != 0){
+            sprintf_s(s + k, l - k, "%.2f*(cos(t) + t*sin(t))", r);
+            k = strlen(s);
+        }
+        if (p.x != 0 && r != 0)
+            sprintf_s(s + k, l - k, " + %.2f", p.x);
+        else if(r == 0)
+            sprintf_s(s + k, l - k, "%.2f", p.x);
         k = strlen(s);
 
-
-        sprintf_s(s, l, "Y = ");
-        if (p.y == 0 && r == 0)
-            sprintf_s(s, l, "0");
-        if (p.y != 0)
-            sprintf_s(s, l, "%.2f + ", p.y);
+        sprintf_s(s + k, l - k, " | Y = ");
         k = strlen(s);
-        if (r != 0)
-            sprintf_s(s + k, l - k, " + %.2f*(sin(t) - t*cos(t))\n", r);
+        if (r != 0) {
+            sprintf_s(s + k, l - k, "%.2f*(sin(t) - t*cos(t))", r);
+            k = strlen(s);
+        }
+        if (p.y != 0 && r != 0)
+            sprintf_s(s + k, l - k, " + %.2f", p.y);
+        else if (r == 0)
+            sprintf_s(s + k, l - k, "%.2f", p.y);
         return s;
     }
 }
